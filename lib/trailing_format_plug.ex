@@ -13,7 +13,7 @@ defmodule TrailingFormatPlug do
 
       [ format | fragments ] ->
         new_path       = fragments |> Enum.reverse() |> Enum.join(".")
-        path_fragments = List.replace_at conn.path_info, -1, new_path
+        path_fragments = if new_path == "", do: List.delete_at(conn.path_info, -1), else: List.replace_at conn.path_info, -1, new_path
         params         =
           Plug.Conn.fetch_query_params(conn).params
           |> update_params(new_path, format)
